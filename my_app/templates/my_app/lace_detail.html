@@ -1,0 +1,18 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/laces/lace-detail.css' %}" />
+{% endblock %} 
+{% block content %}
+
+<div class="card" style="border-color: {{ lace.color }}">
+  <div class="card-bg" style="background-color: {{ lace.color }}"></div>
+  <div class="card-content">
+    <h2>A {{ lace.color }} lace</h2>
+  </div>
+</div>
+<a href="{% url 'lace_update' lace.id %}" class="btn warn">Edit</a>
+<a href="{% url 'lace_delete' lace.id %}" class="btn danger">Delete</a>
+
+
+{% endblock %}

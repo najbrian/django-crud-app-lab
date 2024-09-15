@@ -1,0 +1,26 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/laces/lace-index.css' %}" />
+{% endblock %} 
+{% block content %}
+
+<section class="page-header">
+  <h1>All Shoe Lace Colors</h1>
+</section>
+
+<section class="card-container">
+  {% for lace in lace_list %}
+    <div class="card" style="border-color: {{ lace.color }}">
+      <div class="card-bg" style="background-color: {{ lace.color }}"></div>
+      <a href="{% url 'lace_detail' lace.id %}">
+        <div class="card-content">
+          <h2>Lace Color: {{ lace.color }}</h2>
+
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+</section>
+
+{% endblock %}

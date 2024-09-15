@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/shoes/shoe-detail.css' %}" />
+{% endblock %}
+{% block content %}
+  <section class="shoe-container">
+    <div class="shoe-img">
+      <div class="shoe-details">
+        <h1>{{ shoe.model }}</h1>
+        <h2>Brand: {{ shoe.brand }}</h2>
+        <h2>Purchased: {{ shoe.purchase_date }}</h2>
+        <h2>Size: {{ shoe.size }}</h2>
+        <h2>Bought Price: {{ shoe.price }}</h2>
+        <p>Details: {{ shoe.description }}</p>
+
+        <div class="shoe-actions">
+          <a href="{% url 'shoe_update' shoe.id %}" class="btn warn">Edit</a>
+          <a href="{% url 'shoe_delete' shoe.id %}" class="btn danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lace">
+    <div class="subsection-title">
+      <h2>Laces</h2>
+    </div>
+
+    <h3>{{ shoe.model }}'s Laces</h3>
+    <div class="subsection-content">
+      {% if shoe.laces.count %}
+        {% for lace in shoe.laces.all %}
+          <div class="lace-container">
+            <div class="color-block" style="background-color: {{ lace.color }}"></div>
+            <a href="{% url 'lace_detail' lace.id %}"><p>{{ lace.color }} Laces</p></a>
+            <form action="{% url 'disassociate_lace' shoe.id lace.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Remove Laces</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-laces">{{ shoe.model }} doesn't have any laces!</p>
+      {% endif %}
+    </div>
+
+    <h3>Available Laces</h3>
+    <div class="subsection-content">
+      {% if laces.count %}
+        {% for lace in laces.all %}
+          <div class="lace-container">
+            <div class="color-block" style="background-color: {{ lace.color }}"></div>
+            <a href="{% url 'lace_detail' lace.id %}">
+              <p>{{lace.color}} Laces</p>
+            </a>
+            <form action="{% url 'associate_lace' shoe.id lace.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn submit">Add Laces</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="all-toys">{{shoe.model}} already has all the available laces 🥳</p>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}
