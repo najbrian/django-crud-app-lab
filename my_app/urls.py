@@ -19,4 +19,4 @@ urlpatterns = [
   path('shoes/<int:shoe_id>/associate-lace/<int:lace_id>/', views.associate_lace, name='associate_lace'),
   path('shoes/<int:shoe_id>/disassociate-lace/<int:lace_id>/', views.disassociate_lace, name='disassociate_lace'),
   path('accounts/signup/', views.signup, name='signup'),
-]
+] 

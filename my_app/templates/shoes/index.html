@@ -10,11 +10,14 @@
       <div class="card">
         <a href="{% url 'shoe_detail' shoe.id %}">
           <div class="card-content">
-            {% comment %} <img
-              class='banner'
-              src= '{{shoe.photo.url}}'
-              alt='{{shoe.model}}'
-            /> {% endcomment %}
+            {% if shoe.photo %}
+              <img
+                src= '{{shoe.photo.url}}'
+                alt='{{shoe.model}}'
+              />
+            {% else %}
+              <p>You do not have any photos for this shoe!</p>
+            {%endif%}
             <h2 class="card-title">{{ shoe.model }}</h2>
             <p>
               <small>{{ shoe.description }}</small>
