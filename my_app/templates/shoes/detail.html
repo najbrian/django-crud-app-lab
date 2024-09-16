@@ -21,12 +21,49 @@
       </div>
     </div>
   </section>
+    <div class="cleaning-shoe-container">
+      <section class="cleanings">
+        <div class="subsection-title">
+          <h2>Cleaning</h2>
+        </div>
 
-  <section class="lace">
-    <div class="subsection-title">
-      <h2>Laces</h2>
+        <h3>Add Cleaning</h3>
+        <!-- Add just ab%ove the feedings table -->
+        <form action="{% url 'add_cleaning' shoe.id%}" method="post" class="subsection-content" autocomplete="off">
+          {% csrf_token %}
+          {{ cleaning_form.as_p }}
+          <button type="submit" class="btn submit">Add Cleaing</button>
+        </form>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Washed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cleaning in shoe.cleaning_set.all %}
+              <tr>
+                <td>{{ cleaning.date }}</td>
+                <td>
+                  {% if cleaning.confirmation %}
+                    Yes
+                  {% else %}
+                    No
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
     </div>
 
+    <section class="lace">
+      <div class="subsection-title">
+        <h2>Laces</h2>
+      </div>
     <h3>{{ shoe.model }}'s Laces</h3>
     <div class="subsection-content">
       {% if shoe.laces.count %}
@@ -51,9 +88,7 @@
         {% for lace in laces.all %}
           <div class="lace-container">
             <div class="color-block" style="background-color: {{ lace.color }}"></div>
-            <a href="{% url 'lace_detail' lace.id %}">
-              <p>{{lace.color}} Laces</p>
-            </a>
+            <a href="{% url 'lace_detail' lace.id %}"><p>{{ lace.color }} Laces</p></a>
             <form action="{% url 'associate_lace' shoe.id lace.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn submit">Add Laces</button>
@@ -61,7 +96,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <p class="all-toys">{{shoe.model}} already has all the available laces 🥳</p>
+        <p class="all-toys">{{ shoe.model }} already has all the available laces 🥳</p>
       {% endif %}
     </div>
   </section>

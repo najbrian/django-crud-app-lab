@@ -32,3 +32,12 @@ class Shoe(models.Model):
   
   def get_absolute_url(self):
     return reverse("shoe_detail", kwargs={"shoe_id": self.id})
+
+class Cleaning(models.Model):
+  date = models.DateField()
+  confirmation = models.BooleanField('Washed')
+  shoe = models.ForeignKey(Shoe, on_delete=models.CASCADE)
+  
+  def __str__ (self):
+    status = 'Washed' if self.confirmation else 'Not washed'
+    return f'{status} {self.shoe.model} on {self.date}'

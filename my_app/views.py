@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Shoe, Lace
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.views import LoginView
+from .forms import CleaningForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -22,7 +23,17 @@ def shoe_index(request):
 def shoe_detail(request, shoe_id):
   shoe=Shoe.objects.get(id=shoe_id)
   laces_shoe_doesnt_have = Lace.objects.exclude(id__in = shoe.laces.all().values_list('id'))
-  return render(request, 'shoes/detail.html', {'shoe': shoe, 'laces': laces_shoe_doesnt_have,})
+  cleaning_form = CleaningForm()
+  return render(request, 'shoes/detail.html', {'shoe': shoe, 'laces': laces_shoe_doesnt_have, 'cleaning_form': cleaning_form})
+
+@login_required
+def add_cleaning(request, shoe_id):
+  form = CleaningForm(request.POST)
+  if form.is_valid():
+    new_cleaning = form.save(commit=False)
+    new_cleaning.shoe_id = shoe_id
+    new_cleaning.save()
+  return redirect('shoe_detail', shoe_id = shoe_id)
 
 @login_required
 def associate_lace(request, shoe_id, lace_id):
@@ -84,3 +95,4 @@ class LaceUpdate (UpdateView, LoginRequiredMixin):
 class LaceDelete (DeleteView, LoginRequiredMixin):
   model = Lace
   success_url = '/laces/'
+  
